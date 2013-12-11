@@ -1,0 +1,65 @@
+function gz() {
+	echo "orig size:"
+	SIZE=`cat "$1" | wc -c`
+	KB=$(echo "scale=1; ${SIZE}/1024" | bc)
+	MB=$(echo "scale=1; ${KB}/1024"   | bc)
+	printf "%10s %s\n" $SIZE "bytes"
+	printf "%10s %s\n" $KB   "KB"
+	printf "%10s %s\n" $MB   "MB"
+
+	echo "gzipped size:"
+	SIZE=`gzip -c "$1" | wc -c`
+	KB=$(echo "scale=1; ${SIZE}/1024" | bc)
+	MB=$(echo "scale=1; ${KB}/1024"   | bc)
+	printf "%10s %s\n" $SIZE "bytes"
+	printf "%10s %s\n" $KB   "KB"
+	printf "%10s %s\n" $MB   "MB"
+}
+
+function tree() {
+	find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+}
+
+function treeFolder() {
+	ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
+}
+
+# cd into whatever is the forefront Finder window.
+cdf() {  # short for cdfinder
+	cd "`osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)'`"
+}
+
+function get_size() {
+	ls -l $1 | awk '{sum+=$5; tot+=1} END {print sum/1024/1024" MB"; print tot" files"}'
+}
+
+function fs() {
+	if du -b /dev/null > /dev/null 2>&1; then
+		local arg=-sbh
+	else
+		local arg=-sh
+	fi
+	if [[ -n "$@" ]]; then
+		du $arg -- "$@"
+	else
+		du $arg .[^.]* *
+	fi
+}
+
+function get_size_recursize() {
+	SUM=0;
+	dirs=`ls`;
+
+	for d in $dirs; do
+	        if [ -d $d ]; then
+	                SIZE=`ls -l $d | awk '{sum+=$5} END {print sum}'`;
+	                SUM=`expr $SUM + $SIZE`
+	        fi
+	done
+
+	echo $SUM bytes
+	SUM=`expr $SUM / 1024`
+	echo $SUM kB
+	SUM=`expr $SUM / 1024`
+	echo $SUM MB
+}
