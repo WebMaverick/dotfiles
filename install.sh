@@ -23,6 +23,7 @@ do
 		cp ${f} dotfiles
 	fi
 done
-ls -la dotfiles
 
 cp ${SCRIPT_DIR}/.profile .profile
+
+echo "Now run: source ~/.profile"
