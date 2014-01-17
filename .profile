@@ -1,4 +1,4 @@
-PATH=/usr/local/bin:$PATH:$HOME/bin
+export PATH=/usr/local/bin:$PATH:$HOME/bin:$HOME/pear/bin
 
 source ~/dotfiles/.functions
 source ~/dotfiles/.exports
