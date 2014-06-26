@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd ~/SVN-Shots
+tlassemble . ~/Desktop/time_lapse.mov -fps 5
+#tlassemble . ~/Desktop/time_lapse.mov
+#tlassemble . ~/Desktop/time_lapse.mov -fps 30 -height 720 -codec h264 -quality high
+#tlassemble . ~/Desktop/time_lapse.mov -quiet yes

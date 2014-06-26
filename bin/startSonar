@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd ~/ddi/sonar-3.5.1/bin/macosx-universal-64
+./sonar.sh start

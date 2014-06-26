@@ -1,0 +1,14 @@
+conflictList=`svn stat | awk '{
+    if ($1 == ">") {
+        if ($2 == "local") {
+            if ($3 == "add,") {
+                print svn resolved prevAdd
+            } else if ($3 == "delete,") {
+                print prevDelete
+            }
+        }
+    }
+    prevDelete = $3
+    prevAdd = $2
+}'`
+svn resolved $conflictList

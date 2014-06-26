@@ -1,0 +1,40 @@
+#!/bin/bash
+
+ICAO=KSEA;
+if [ $# -gt 0 ]; then
+    ICAO=$1
+fi
+
+URL=http://weather.noaa.gov/pub/data/observations/metar/stations/${ICAO}.TXT
+
+METAR=`curl -s ${URL}`
+# regex="/T(\d{1})(\d{3})(\d{1})(\d{3})/"
+# regex=("^[0-9]{6}Z$" "^T[0-9]{8}$");
+# regex[0]="^[0-9]{6}Z$"
+regexTemp="^T[0-9]{8}$"
+
+echo ${METAR}
+SYMBOLE=""
+for line in ${METAR}
+do
+	# echo ${line}
+	if [[ ${line} =~ ${regexTemp} ]]; then
+		TEMP=${line:2:3}
+		SIGN=${line:1:1}
+		TMP=`awk -v temp=${TEMP} 'BEGIN {print temp / 10}'`
+		if [[ "${SIGN}" == "1" ]]; then
+			TMP=`echo "${TMP} * -1" | bc`
+		fi
+		echo "${TMP} * 1.8 + 32" | bc
+	elif [[ ${line} =~ ^(FEW|SCT|BKN|OVC|VV)[0-9]{3}$ ]]; then
+		HEIGHT=${line/[A-Z][A-Z][A-Z]/}
+		theRest=${line/${HEIGHT}/}
+		theRest=${theRest/FEW/⦵}
+		theRest=${theRest/SCT/⦶}
+		theRest=${theRest/BKN/⊜}
+		theRest=${theRest/OVC/⊕}
+		theRest=${theRest/VV/⦻}
+		SYMBOLS+=${HEIGHT}${theRest}" "
+	fi
+done
+echo $SYMBOLS

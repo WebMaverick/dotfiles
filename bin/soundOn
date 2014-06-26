@@ -1,0 +1,7 @@
+#!/bin/bash
+
+isSoundMuted=`osascript -e "get output muted of (get Volume settings)"`
+
+if [ ${isSoundMuted} == "true" ]; then
+	osascript -e "set Volume output muted false"
+fi

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Simple script to list the devices an ipa has been built for
+# Copyright © Tapadoo, 2011.  All Rights Reserved
+# No warranty is provided for the use of this script
+# You are free to modify this for your needs
+LANG=C
+IPAFILE=$1
+TMPDIR=tmp$$.tmp
+SEDFILE=~/Desktop/builds/devices.sed
+LISTFILE=list.txt
+DIRTYFILE=dirty.txt
+CLEANFILE=clean.txt
+mkdir $TMPDIR
+unzip -qq $IPAFILE -d $TMPDIR
+EMBEDFILE=`find $TMPDIR -name embedded.mobileprovision -print | head -1`
+EMBEDFILEONLY=$EMBEDFILE.plist
+sed -n '/plist/,/\/plist/p' $EMBEDFILE > $EMBEDFILEONLY
+sed -n '/ProvisionedDevices/,/\/array/p' $EMBEDFILEONLY | grep string | sed 's/<[/]*string>//g' > ${LISTFILE}
+sed -f ${SEDFILE} < ${LISTFILE} > ${CLEANFILE}
+
+cat ${CLEANFILE} | awk '{if (length($1) == 40) {print $1}}' > ${DIRTYFILE}
+rm -rf $TMPDIR
+rm ${LISTFILE}
+sort ${CLEANFILE}
+rm ${CLEANFILE}
+
+cat ${DIRTYFILE} | awk -v file=${SEDFILE} '{
+	print "Who is this: "$0; getline choice < "/dev/tty";
+	if (length(choice) > 0) {
+		print file
+		print "s/"$0"/"choice"/" >> file
+		print "Added, thanks!"
+	}
+}'
+rm ${DIRTYFILE}
+
+#p = "/var/lib/vmware/Virtual Machines"
+#echo $p
+#q = $(echo $p | sed 's/ /\\ /g')
+#echo $q

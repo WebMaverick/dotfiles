@@ -1,0 +1,27 @@
+#!/bin/sh
+# Author: Brian Gershon, 3/8/13
+# Modified: Adam Hardtke, 4/30/13
+#
+# Do a smart VCS working directory 'status' depending on if you're in a git,
+# 	mercurial or subversion repository.
+#
+
+git rev-parse 2> /dev/null
+if [ $? -eq 0 ]; then
+	gitdiff $@
+	exit
+fi
+
+hg -q stat 1> /dev/null 2> /dev/null
+if [ $? -eq 0 ]; then
+	hgdiff $@
+	exit
+fi
+
+svn info 1> /dev/null 2> /dev/null
+if [ $? -eq 0 ]; then
+	svndiff $@
+	exit
+fi
+
+echo "---\nA git, mercurial or subversion repository not found.\n---\n"

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function usage {
+	echo "usage: playSound [soundboard-filename-without-extension]"
+	ls -l ~/bin/soundBoard | awk '{
+		if (NF >= 9) {
+			sound = $9;
+			sub(".mp3", "", sound);
+			print sound
+		}
+	}'
+}
+
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+else
+	SOUND=$1
+fi
+
+
+FILE=~/bin/soundboard/${SOUND}.mp3
+if [ -f ${FILE} ]; then
+	soundOn
+	afplay ${FILE}
+else
+	usage
+	exit 1
+fi

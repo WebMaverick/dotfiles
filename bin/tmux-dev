@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# mod the font!
+# https://github.com/Lokaltog/vim-powerline/tree/develop/fontpatcher
+# brew update
+# brew install --use-gcc fontforge
+# fontforge -script /System/Library/Fonts/Monaco.dfont MonacoPatched.ttf
+# https://gist.github.com/1634235
+
+# Create a tmux development session
+
+# Kill previous session and start again
+tmux kill-session -t dev
+
+# START THESE MANUALLY FIRST
+# mysql.server start
+# memcached -d
+
+export DDI_CODE_BRANCH='~/ddi/branches/php-dealer'
+
+# Create new 'dev' session
+tmux new-session -s dev -n source -d
+
+# 1: 'svn' window
+tmux send-keys -t dev:1 'cd '$DDI_CODE_BRANCH'/application' C-m
+
+
+# 2: 'jasmine tests' window
+# tmux new-window -n 'test runner' -t dev
+# tmux send-keys -t dev:2 'cd '$DDI_CODE_BRANCH/spec C-m
+# tmux send-keys -t dev:2 './runtests.sh' C-m
+
+# # 4: 'watch sass' window
+# tmux new-window -n 'watch sass' -t dev
+# tmux send-keys -t dev:4 'cd ~/code/ddi/$DDI_CODE_BRANCH' C-m
+# tmux send-keys -t dev:4 'sass --watch mobile/libraries/dd/assets/slots/sass/:mobile/stylesheets' C-m
+#
+
+# tmux split-window -h -t dev:1
+# tmux send-keys -t dev:1.2 'cd ~/ddi/branches' C-m
+tmux send-keys -t dev:2 'cd '$DDI_CODE_BRANCH'/tests' C-m
+tmux select-pane -t dev:1.1
+#tmux select-layout -t dev main-horizontal
+#tmux split-window -v -t dev
+#tmux select-layout -t dev main-horizontal
+
+echo "Now run: tmux attach-session -t dev"
+tmux attach-session -t dev

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PATCH_FILE=patch.diff
+if [ -f $1 ]; then
+	PATCH_FILE=$1
+fi
+
+svn patch ${PATCH_FILE}
+rm ${PATCH_FILE}

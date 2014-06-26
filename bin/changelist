@@ -1,0 +1,19 @@
+#!/bin/sh
+
+function usage {
+	echo "usage: changelist CHANGELIST_NAME"
+}
+
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+fi
+
+CHANGELIST_NAME=$1;
+
+FILES=`svn stat | awk '{print $2}'`
+
+for FILE in ${FILES}
+do
+	svn changelist ${CHANGELIST_NAME} ${FILE}
+done

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ $# = 1 ]
+then
+  grep -r --exclude=*.tmp --exclude=*.svn-base --exclude=*all-wcprops --exclude=*.svn* --color=auto -n $1 .
+else
+  echo "Usage: grepsvn [pattern]"
+fi
+

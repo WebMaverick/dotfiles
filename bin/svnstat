@@ -1,0 +1,21 @@
+#!/bin/sh
+if [[ $1 = 'stat' || $1 = 'st' || $1 = 'status' ]]; then
+	svn $* | awk '{
+		COLOR = ""
+		if ($1 == "D") {
+			COLOR = "\033[0;31m"
+		} else if ($1 == "M") {
+			COLOR = "\033[0;36m"
+		} else if ($1 == "A") {
+			COLOR = "\033[0;32m"
+		} else if ($1 == "?") {
+			COLOR = "\033[1;30m"
+		}
+		print COLOR $0 "\033[0m"
+	}'
+elif [[ $1 = 'commit' || $1 = 'ci' ]]; then
+	svn $*
+	say_cheese
+else
+	svn $*
+fi

@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+file="~/SVN-shots/#{Time.now.to_i}.jpg"
+puts "Say cheese! Taking capture into #{file}!"
+system "imagesnap -q -w 3 #{file}"
+exit 0

@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+file="~/movember/#{Time.now.to_i}.jpg"
+puts "Happy Mobember!! Taking capture into #{file}!"
+system "imagesnap -q -w 3 #{file}"
+exit 0
