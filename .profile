@@ -12,7 +12,7 @@ fi
 # Shamelessly copied from https://github.com/gf3/dotfiles
 # https://github.com/paulirish/dotfiles/blob/master/.bash_prompt
 
-default_username='adam'
+default_username='Adam'
 
 
 

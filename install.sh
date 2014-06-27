@@ -50,11 +50,25 @@ copyFiles bin
 
 # Make aliases
 cd ~/bin
-ln -s diffmerge-any d
-ln -s playSound p
-ln -s ~/git/WebMaverick/5498884/s.sh s
-# ln -s /Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl subl
+if [[ ! -h d ]]; then
+	ln -s diffmerge-any d
+fi
+if [[ ! -h p ]]; then
+	ln -s playSound p
+fi
+if [[ ! -h s ]]; then
+	ln -s ~/git/WebMaverick/5498884/s.sh s
+fi
+if [[ ! -h subl ]]; then
+	ln -s /Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl subl
+fi
 
 cp ${SCRIPT_DIR}/.profile ~/.profile
+source ~/.profile
+
+cd ${SCRIPT_DIR}
+source scripts/pip.sh
+source scripts/pygmentize.sh
+
 
 echo "Now run: source ~/.profile"
